@@ -1,6 +1,6 @@
 const readline = require('readline');
 
-const reader = readline.createInterface({
+const reader1 = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
@@ -13,10 +13,9 @@ class Game {
   promptMove(cb) {
     console.log(this.stacks);
     let that = this;
-    reader.question("Select start tower (0, 1, 2): ", function(start) {
-      reader.question("Select end tower: ", function(end) {
-        cb(start, end)
-          }
+    reader1.question("Select start tower (0, 1, 2): ", function(start) {
+      reader1.question("Select end tower: ", function(end) {
+        cb(start, end);
       });
     });
   }
@@ -26,7 +25,7 @@ class Game {
       return false;
     } else if (this.stacks[endTower].length === 0){
       return true;
-    } else if (this.stacks[startTower][0] > this.stacks[endTower][0]){
+    } else if (this.stacks[startTower][0] < this.stacks[endTower][0]){
       return true;
     } else {
       return false;
@@ -51,27 +50,21 @@ class Game {
   }
 
   run(completionCallback) {
-    this.promptMove(function(){
-      if (that.isValidMove(start, end)) {
-        that.move(start, end)
-        console.log(that.print());
+    this.promptMove( (start, end) => {
+      if (this.isValidMove(start, end)) {
+        this.move(start, end);
+        console.log(this.print());
+      } else {
+        console.log("Invalid move.");
+      }
+      if (!this.isWon()){
+        this.run(completionCallback);
+      } else {
+        completionCallback();
       }
     });
-  completionCallback();
   }
 }
 
-const game = new Game();
-game.run(function () {
-  console.log("Winner, winner, chicken dinner!");
-  reader.close();
-});
 
-// const game = new Game([[], [1, 2, 3], []]);
-// console.log(game.isWon());
-//
-// const game2 = new Game([[], [], [1, 2, 3]]);
-// console.log(game2.isWon());
-//
-// const game3 = new Game([[], [1, 2], [3]]);
-// console.log(game3.isWon());
+module.exports = Game;
