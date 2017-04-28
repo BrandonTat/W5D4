@@ -1,0 +1,8 @@
+class Towers{
+  run() {
+    until discs are moved from tower 0 to tower 1 or tower 2
+      get start tower
+      get end tower
+      move disc from start tower to end tower
+  }
+}
